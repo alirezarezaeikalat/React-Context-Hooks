@@ -9,7 +9,9 @@
     components.
 
 2. Hooks: 
-    Tap into the inner workings of React in functional components
+    hooks are special functions and allow us to do additional
+    things inside functional components that we normally use 
+    inside class components 
 
 3. We can make context component for each type of data that we 
   want to use, in order to do this: 
@@ -78,3 +80,65 @@
       }}</ThemeContext.Consumer>
     );
   }
+
+6. We can pass functions in value property of ThemeContext.Provider,
+  and use this function, just like we use data:
+
+    export const ThemeContext = createContext();
+    class ThemeContextProvider extends Component {
+      state = { 
+        isLightTheme: true,
+        light: { syntax: '#555', ui: '#ddd', bg: '#eee'},
+        dark: { syntax: '#ddd', ui: '#333', bg: '#555'}
+      }
+      toggleTheme = () => {
+        this.setState({isLightTheme: !this.state.isLightTheme});
+      }
+      render() { 
+        return ( 
+          <ThemeContext.Provider value={{...this.state, toggleTheme: this.toggleTheme}}>
+            {this.props.children}
+          </ThemeContext.Provider>
+        );
+      }
+    }
+
+    export default ThemeContextProvider;
+
+
+7. In order to use multiple context, we can use multiple 
+  Context.Consumer:
+
+const Navbar = () => {
+  return (
+    <AuthContext.Consumer>{(authContext) => {
+      return (
+        <ThemeContext.Consumer>
+          {(themeContext) => {
+            const {isAuthenticated, toggleAuth} = authContext;
+            const { isLightTheme, light, dark } = themeContext;
+            const theme = isLightTheme ? light : dark;
+            return (
+              <nav style={{ background: theme.ui, color: theme.syntax }}>
+                <h1>Context app</h1>
+                <div onClick={toggleAuth}>
+                  {isAuthenticated ? 'Logged in' : 'Logged out'}
+                </div>
+                <ul>
+                  <li>Home</li>
+                  <li>About</li>
+                  <li>Contact</li>
+                </ul>
+              </nav>
+            );
+          }}</ThemeContext.Consumer>
+      );
+    }}</AuthContext.Consumer>
+  );
+}
+export default Navbar
+
+8. Hooks: 
+    hooks are just special functions and allow us to do additional
+    things inside functional components, that we normally use 
+    inside class components 
