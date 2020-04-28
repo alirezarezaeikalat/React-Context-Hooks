@@ -142,3 +142,33 @@ export default Navbar
     hooks are just special functions and allow us to do additional
     things inside functional components, that we normally use 
     inside class components 
+
+9. We can use useState hooks in functional components:
+    useState is a function that return data, and setState function
+
+      import React, { useState } from 'react';
+      import uuid from u
+      const SongList = () => {
+        const [songs, setSongs] = useState([
+          { title: 'almost home', id: 1 },
+          { title: 'memory gospel', id: 2 },
+          { title: 'this wild darkness', id: 3 },
+        ]);
+        const addSong = () => {
+          setSongs([...songs, {title: 'new song', id: 4}]);
+        }
+        return ( 
+          <div className="song-list">
+            <ul>
+              {songs.map(song => {
+                return (
+                <li key={ song.id }>{ song.title }</li>
+                )
+              })}
+            </ul>
+            <button onClick={addSong}>Add a song</button>
+          </div>
+        );
+      }
+      
+      export default SongList;
