@@ -172,3 +172,71 @@ export default Navbar
       }
       
       export default SongList;
+
+10. useEffect is just like life cycle hooks in class components,
+    it runs every time the component render to the dom:
+
+it runs by every data changes:
+
+    import React, { useState, useEffect } from 'react';
+    import uuid from 'uuid/v1';
+    import NewSongForm from './NewSongForm';
+    const SongList = () => {
+      const [songs, setSongs] = useState([
+        { title: 'almost home', id: 1 },
+        { title: 'memory gospel', id: 2 },
+        { title: 'this wild darkness', id: 3 },
+      ]);
+      const addSong = (title) => {
+        setSongs([...songs, {title: title, id: uuid()}]);
+      }
+
+      useEffect(() => {
+        console.log('useEffect hook ran', songs)
+      })
+      return ( 
+        <div className="song-list">
+          <ul>
+            {songs.map(song => {
+              return (
+              <li key={ song.id }>{ song.title }</li>
+              )
+            })}
+          </ul>
+          <NewSongForm addSong={addSong}/>
+        </div>
+      );
+    }
+    
+    export default SongList;
+
+[ATTENTION]
+  we can specify dependency for the useEffect hooks (in case of the 
+  change in the specified data, the useEffect hooks runs)
+
+11. we can use useContext hooks, to use context inside the functional
+  components, (without hooks, we use static contextType or 
+  context.consumer)
+
+    import React, { useContext } from 'react';
+
+    const BookList = () => {
+    const { isLightTheme, light, dark } = useContext(ThemeContext);
+    const theme = isLightTheme ? light : dark; 
+    return (
+      <div
+        className="book-list"
+        style={{ color: theme.syntax, background: theme.bg }}
+      >
+        <ul>
+          <li style={{ background: theme.ui }}>The way of the kings</li>
+          <li style={{ background: theme.ui }}>The name of the wind</li>
+          <li style={{ background: theme.ui }}>The final empire</li>
+        </ul>
+      </div>
+    );
+  }
+  export default BookList; 
+
+12. We can also makes context with, hooks, we only use class based 
+    components to use the state in that class based

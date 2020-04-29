@@ -5,7 +5,6 @@ const NewSongForm = (props) => {
   const [title, setTitle] = useState('');
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(title);
     addSong(title);
     setTitle('');
   }
