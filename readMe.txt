@@ -240,3 +240,49 @@ it runs by every data changes:
 
 12. We can also makes context with, hooks, we only use class based 
     components to use the state in that class based
+
+
+13. We can use reducers with context and hooks: 
+
+    a. first make the reducer function, in fact the reducer function
+      is the function that we pass to the special hook, and we give this
+      function(reducer) state and action, each action can have the payload
+      beside the type:
+
+        import { v4 as uuidv4 } from "uuid";
+        export const bookReducer = (state, action) => {
+          switch(action.type){
+            case 'ADD_BOOK':
+              return [...state, {
+                title: action.book.title, 
+                author: action.book.author,
+                id: uuidv4() 
+              }]
+            case 'REMOVE_BOOK':
+              return state.filter(book => book.id !== action.id);
+            default:
+              return state;
+          }
+        }
+
+      b. then we should useReducer in context instead of the useState:
+
+        import React, { createContext, useReducer } from 'react';
+        import { bookReducer } from '../reducers/BookReducer';
+        
+        export const BookContext = createContext();
+        const BookContextProvider = (props) => {
+          // We begin by the empty array for the books
+          const [books, dispatch] = useReducer(bookReducer, []);
+          return ( 
+            <BookContext.Provider value={{books, dispatch}}>
+              { props.children }
+            </BookContext.Provider>
+          );
+        }
+        export default BookContextProvider;
+
+
+
+
+    
