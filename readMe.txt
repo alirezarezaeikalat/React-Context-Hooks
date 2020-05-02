@@ -142,6 +142,7 @@ export default Navbar
     hooks are just special functions and allow us to do additional
     things inside functional components, that we normally use 
     inside class components 
+    (useState, useEffect, useContext, useReducer)
 
 9. We can use useState hooks in functional components:
     useState is a function that return data, and setState function
@@ -193,7 +194,7 @@ it runs by every data changes:
 
       useEffect(() => {
         console.log('useEffect hook ran', songs)
-      })
+      }, [songs])
       return ( 
         <div className="song-list">
           <ul>
@@ -213,6 +214,7 @@ it runs by every data changes:
 [ATTENTION]
   we can specify dependency for the useEffect hooks (in case of the 
   change in the specified data, the useEffect hooks runs)
+  (check the example above)
 
 11. we can use useContext hooks, to use context inside the functional
   components, (without hooks, we use static contextType or 
@@ -266,7 +268,7 @@ it runs by every data changes:
         }
 
       b. then we should useReducer in context instead of the useState:
-
+         
         import React, { createContext, useReducer } from 'react';
         import { bookReducer } from '../reducers/BookReducer';
         
@@ -282,7 +284,31 @@ it runs by every data changes:
         }
         export default BookContextProvider;
 
+      c. Then use the books, and dispatch method in the components 
+          that we want: 
 
+          const BookDetails = ({ book }) => {
+          const { dispatch } = useContext(BookContext);
+          return ( 
+            <li onClick={() => dispatch({type: 'REMOVE_BOOK', id: book.id})}>
+              <div className="title">{ book.title }</div>
+              <div className="author">{ book.author }</div>
+            </li>
+          );
+        }
+        export default BookDetails;
+
+14. Using local storages for storing the data: 
+
+      a. to check the localstorage, type localStorage in the console of the
+      browser.
+
+      b. To use localStorage for saving data, we can use, useEffect 
+        hook to save the new data to localStorage, everytime, we add or 
+        remove book, but we need to get this data from localStorage 
+        when we load our app for the first time, in order to do this, 
+        we can use, third parameter of the useReducer that is the 
+        function that make the initial value for the state:
 
 
     
